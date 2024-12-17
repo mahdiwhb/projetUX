@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Liste des Produits</title>
+    <style>
+        body { 
+            font-family: Arial, sans-serif; 
+            margin: 20px; 
+            background-color: #f4f4f4;
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+        .product-card { 
+            border: 1px solid #ddd; 
+            padding: 15px; 
+            margin: 15px; 
+            border-radius: 10px; 
+            display: inline-block; 
+            width: 250px; 
+            text-align: center;
+            background-color: #ffffff; 
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .product-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+        }
+        .product-card img {
+            width: 100%;
+            height: 180px;
+            object-fit: cover;
+            border-radius: 5px;
+        }
+        .product-card h3 {
+            color: #007bff;
+            font-size: 1.2em;
+            margin-top: 10px;
+        }
+        .product-card p {
+            color: #555;
+            font-size: 0.9em;
+            margin: 10px 0;
+        }
+        .product-card strong {
+            color: #d9534f;
+            font-size: 1.1em;
+        }
+
+        .pagination {
+            margin: 20px 0;
+            text-align: center;
+        }
+        .pagination a { 
+            margin: 0 5px; 
+            padding: 6px 12px; 
+            text-decoration: none; 
+            border: 1px solid #007bff; 
+            color: #007bff; 
+            border-radius: 5px;
+            font-size: 0.9em;
+        }
+        .pagination a.active {
+            background-color: #007bff; 
+            color: #fff; 
+            font-weight: bold;
+        }
+        .pagination a:hover {
+            background-color: #007bff; 
+            color: white;
+        }
+        .pagination a.disabled {
+            background-color: #ddd;
+            color: #aaa;
+            pointer-events: none;
+        }
+    </style>
+</head>
+<body>
+    <h1>Liste des Produits</h1>
+
+    <div>
+        {{range .Products}}
+        <div class="product-card">
+            <h3>{{.Name}}</h3>
+            <p>{{.Description}}</p>
+            <p><strong>{{printf "%.2f" .Price}} €</strong></p>
+            <img src="{{.ImageURL}}" alt="{{.Name}}">
+        </div>
+        {{else}}
+        <p>Aucun produit trouvé.</p>
+        {{end}}
+    </div>
+    
+    <div class="pagination">
+        {{if gt .Page 1}}
+            <a href="?page={{sub .Page 1}}">Précédent</a>
+        {{else}}
+            <a class="disabled">Précédent</a>
+        {{end}}
+    
+        {{range $i := sequence .StartPage .EndPage}}
+            <a href="?page={{$i}}" {{if eq $.Page $i}}class="active"{{end}}>{{$i}}</a>
+        {{end}}
+    
+        {{if lt .Page .TotalPages}}
+            <a href="?page={{add .Page 1}}">Suivant</a>
+        {{else}}
+            <a class="disabled">Suivant</a>
+        {{end}}
+    </div>
+    
+</body>
+</html>
